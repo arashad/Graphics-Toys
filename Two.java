@@ -175,6 +175,7 @@ public class Two {
 		// dumpArray(pixel,x,y);
 		
 		// Extract Red Only from pixel
+		// Delta test
 		redPixel = Hack(pixel);
 		redImage.setRGB(0, 0, x, y, redPixel, 0, x);
 		displayImage(redImage,"Hack");
