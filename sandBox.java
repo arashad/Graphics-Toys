@@ -15,7 +15,24 @@ public class sandBox{
 //		pixels=mIm.getImagePixels();
 		System.out.println("Before green extract");
 		mImage greenImage = new mImage(mIm.getChannel(mImage.GREEN));
+		//greenImage.displayImage("Green");
 		
-		greenImage.displayImage();
+		System.out.println("Before red extract");
+		try {
+			mIm.loadImage("/home/ahmad/Pictures/ZRV.jpg");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mImage redImage = new mImage(mIm.getChannel(mImage.BLUE));
+		//redImage.displayImage("Red");
+		
+		mImage compositImage = new mImage(mImage.superImpose(greenImage,redImage).getBufferedImage());
+		
+		System.out.println("Before displaying composit");
+		compositImage.displayImage("composite");
+		
+		//greenImage.displayImage("green");
+		// redImage.displayImage("red");
 	}
 }

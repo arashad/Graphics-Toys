@@ -1,17 +1,17 @@
 package ImSB;
 
 import java.awt.BorderLayout;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Time;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import com.sun.org.apache.xalan.internal.xsltc.runtime.ErrorMessages_ja;
 
 public class mImage {
 	// This class is to hold graphics related methods and properties
@@ -38,8 +38,8 @@ public class mImage {
 	public mImage(BufferedImage im){
 		// Constructor for mImage with Image input
 		System.out.println("inside "+this.toString()+" Constructor");
-		height 	= 0;
-		width 	= 0;
+		height 	= im.getHeight();
+		width 	= im.getWidth();
 		image 	= im;
 	}
 	
@@ -60,7 +60,22 @@ public class mImage {
 		width 	= image.getWidth();
 		
 	}
+	
+	public mImage(int[] arr, int x, int y){
+		image.setRGB(0, 0, x, y, arr, 0, x);
+		height = y;
+		width = x;
+	}
+	
+	public mImage(mImage in){
+		image = in.image;
+		height = in.height;
+		width = in.width;
+	}
 	// Methods Area
+	public static BufferedImage getBufferedImage(){
+		return image;
+	}
 	public static void displayImage(String caption){
 		// Display the image with a caption
 		JFrame frame = new JFrame(); 
@@ -91,6 +106,12 @@ public class mImage {
 		width = image.getWidth();
 		}
 	
+	public static void loadImage(BufferedImage bi){
+		// Loads buffered image to the object
+		image = bi;
+		height = image.getHeight();
+		width = image.getWidth();
+	}
 	public static int[] getImagePixels()
 	{
 		// Return the int[] of this image
@@ -125,9 +146,9 @@ public class mImage {
 		return width;
 	}
 	
-	public BufferedImage getChannel(int channel){
+	public static BufferedImage getChannel(int channel){
 		// Extracts a channel from an mImage
-		System.out.println("inside "+this.toString()+" Get Channel");
+		System.out.println("inside Get Channel");
 		int[] pixel = new int[height * width];
 		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		
@@ -139,7 +160,7 @@ public class mImage {
 		System.out.println("Before Channel Extraction Loop inside Get Channel");
 		for (int idx=0;idx<pixel.length;idx++)
 		{
-			pixel[idx]= pixel[idx]&(0xff<<channel);
+			pixel[idx]= pixel[idx]&((0xff<<channel)|(0xff<<ALPHA));
 			//System.out.println(pixel[idx]);
 		}
 		
@@ -148,5 +169,34 @@ public class mImage {
 		bi.setRGB(0, 0, width, height, pixel, 0, width);
 		System.out.println("After Converting int[] to BufferedImage");
 		return bi;
+	}
+	
+	public static mImage superImpose(mImage a, mImage b) throws Error {
+		// returns the superimposed image from mImages a and b, assuming both are the same size
+		// otherwise return an error
+				
+		if (	(a.getLength() != b.getLength())	||
+				(a.getHeight() != b.getHeight())	||
+				(a.getWidth()  != b.getWidth())) 
+		{
+			Error err = new Error("mImages a and b should be identical");
+			throw err;			
+		}
+		int[] pa = new int[a.getLength()]; // blank Array to hold mImage a 
+		int[] pb = new int[b.getLength()]; // blank Array to hold mImage b
+		int[] po = new int[a.getLength()]; // blank Array to hold output mImage
+		
+		// Feed arrays with a and b values
+		pa = a.getImagePixels();
+		pb = b.getImagePixels();
+		
+		// Make operation
+		for (int idx=0;idx<pa.length;idx++)
+		{
+			po[idx]=pa[idx]|pb[idx];
+		}
+		
+		mImage mo = new mImage(po,a.getWidth(),a.getHeight());
+		return mo;
 	}
 }
