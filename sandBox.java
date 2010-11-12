@@ -11,32 +11,25 @@ public class sandBox{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		int[] pixels = new int[mIm.getLength()];
-//		pixels=mIm.getImagePixels();
-		System.out.println("Before green extract");
-		mImage greenImage = new mImage(mIm.getChannel(mImage.GREEN));
-		//greenImage.displayImage("Green");
-		greenImage.displayImage("Green");
 		
-		System.out.println("Before red extract");
-		try {
-			greenImage.displayImage("Green");
-			mIm.loadImage("/home/ahmad/Pictures/ABRV2.jpg");
-			greenImage.displayImage("Green");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		mImage redImage = new mImage(mIm.getChannel(mImage.RED));
-		//redImage.displayImage("Red");
+		mImage greenImage = null;
+		mImage redImage = null;
+		mImage compositeImage = null;
+		
+		//greenImage.setPixels(mIm);
+		System.out.println("A5");
+		greenImage = new mImage(mIm.getChannel(mImage.GREEN));
+		redImage = new mImage(mIm.getChannel(mImage.RED));
+		System.out.println("A10");
+		//compositeImage.setPixels(greenImage);
+		compositeImage = new mImage(greenImage.getImagePixels(),greenImage.getWidth(),greenImage.getHeight());
+		System.out.println("A11");
+		compositeImage.superImpose(redImage);
+		System.out.println("A12");
+		greenImage.displayImage("Green");
 		redImage.displayImage("Red");
-		greenImage.displayImage("Green");
-		mImage compositImage = new mImage(mImage.superImpose(greenImage,redImage).getBufferedImage());
-		
-		System.out.println("Before displaying composit");
-		compositImage.displayImage("composite");
-		
-		//greenImage.displayImage("green");
-		// redImage.displayImage("red");
+		mIm.displayImage("Original");
+		compositeImage.displayImage("Composite");
+
 	}
 }

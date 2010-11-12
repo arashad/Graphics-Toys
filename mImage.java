@@ -11,14 +11,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.sun.org.apache.xalan.internal.xsltc.runtime.ErrorMessages_ja;
-
 public class mImage {
 	// This class is to hold graphics related methods and properties
 	// TODO solve the problem related to copying object by reference
-	protected static int height; 	// Image Height
-	protected static int width; 	// Image Width
-	protected static BufferedImage image;	// Image Data
+	protected int height; 	// Image Height
+	protected int width; 	// Image Width
+	protected BufferedImage image;	// Image Data
 	
 	// the four channels of ARGB color space
 	public static final int ALPHA = 24;
@@ -54,7 +52,7 @@ public class mImage {
 	public mImage(String fileName) throws IOException{
 		// Constructor for mImage with Image input
 		System.out.println("inside "+this.toString()+" Constructor");
-		this.loadImage(fileName);
+		loadImage(fileName);
 		
 		height 	= image.getHeight();
 		width 	= image.getWidth();
@@ -62,9 +60,14 @@ public class mImage {
 	}
 	
 	public mImage(int[] arr, int x, int y){
+		System.out.println("D01");
+		image = new BufferedImage(x, y, BufferedImage.TYPE_INT_ARGB);
 		image.setRGB(0, 0, x, y, arr, 0, x);
+		System.out.println("D02");
 		height = y;
+		System.out.println("D03");
 		width = x;
+		System.out.println("D04");
 	}
 	
 	public mImage(mImage in){
@@ -75,10 +78,10 @@ public class mImage {
 		
 	}
 	// Methods Area
-	public static BufferedImage getBufferedImage(){
+	public BufferedImage getBufferedImage(){
 		return image;
 	}
-	public static void displayImage(String caption){
+	public void displayImage(String caption){
 		// Display the image with a caption
 		JFrame frame = new JFrame(); 
 		JLabel label = new JLabel(new ImageIcon(image)); 
@@ -88,7 +91,7 @@ public class mImage {
 		frame.setVisible(true); 
 	}
 	
-	public static void displayImage(){
+	public void displayImage(){
 		// Display the image with no caption
 		JFrame frame = new JFrame(); 
 		JLabel label = new JLabel(new ImageIcon(image)); 
@@ -98,7 +101,7 @@ public class mImage {
 		frame.setVisible(true); 
 	}
 	
-	public static void loadImage(String fileName) throws IOException{
+	public void loadImage(String fileName) throws IOException{
 		// Loads image to the object
 		File file = new File(fileName); // Convert filename into a File object
 		image = ImageIO.read(file); // Load image into Image object
@@ -108,13 +111,14 @@ public class mImage {
 		width = image.getWidth();
 		}
 	
-	public static void loadImage(BufferedImage bi){
+	public void loadImage(BufferedImage bi){
 		// Loads buffered image to the object
 		image = bi;
 		height = image.getHeight();
 		width = image.getWidth();
 	}
-	public static int[] getImagePixels()
+	
+	public int[] getImagePixels()
 	{
 		// Return the int[] of this image
 		
@@ -133,22 +137,22 @@ public class mImage {
 	    return pixels;
 	}
 	
-	public static int getLength(){
+	public int getLength(){
 		// Returns number of pixels for this image
 		return height * width;
 	}
 	
-	public static int getHeight(){
+	public int getHeight(){
 		// Returns image height
 		return height;
 	}
 	
-	public static int getWidth(){
+	public int getWidth(){
 		// Returns image width
 		return width;
 	}
 	
-	public static BufferedImage getChannel(int channel){
+	public BufferedImage getChannel(int channel){
 		// Extracts a channel from an mImage
 		System.out.println("inside Get Channel");
 		int[] pixel = new int[height * width];
@@ -173,26 +177,30 @@ public class mImage {
 		return bi;
 	}
 	
-	public static mImage superImpose(mImage a, mImage b) throws Error {
-		// returns the superimposed image from mImages a and b, assuming both are the same size
-		// otherwise return an error
+
+	
+	public void superImpose(mImage a) throws Error {
+		// superimpose image with another image passed
+		System.out.println("B01");
 		a.displayImage("Image a in superImpose");
-		b.displayImage("Image b in superImpose");
-		if (	(a.getLength() != b.getLength())	||
-				(a.getHeight() != b.getHeight())	||
-				(a.getWidth()  != b.getWidth())) 
+		System.out.println("B02");
+		if (	(a.getLength() != height * width)	||
+				(a.getHeight() != height)	||
+				(a.getWidth()  != width)) 
 		{
+			System.out.println("BE01");
 			Error err = new Error("mImages a and b should be identical");
 			throw err;			
 		}
+		System.out.println("B05");
 		int[] pa = new int[a.getLength()]; // blank Array to hold mImage a 
-		int[] pb = new int[b.getLength()]; // blank Array to hold mImage b
+		int[] pb = new int[this.getLength()]; // blank Array to hold mImage b
 		int[] po = new int[a.getLength()]; // blank Array to hold output mImage
-		
+		System.out.println("B10");
 		// Feed arrays with a and b values
 		pa = a.getImagePixels();
-		pb = b.getImagePixels();
-		
+		pb = this.getImagePixels();
+		System.out.println("B13");
 		// Make operation
 		for (int idx=0;idx<pa.length;idx++)
 		{
@@ -201,8 +209,29 @@ public class mImage {
 //			System.out.print(" Green ="+((po[idx]>>GREEN)&0xff));
 //			System.out.println(" Blue =" +((po[idx]>>BLUE)&0xff));
 		}
-		
-		mImage mo = new mImage(po,a.getWidth(),a.getHeight());
-		return mo;
+		System.out.println("B20");
+		image.setRGB(0, 0, width, height, po, 0, width); 
+		System.out.println("B21");
+	}
+	
+	public void setPixels(mImage in){
+		// sets the BufferedImage inside the mImage with the int[] values 
+		System.out.println("C01");
+		int x=in.getWidth();
+		int y=in.getHeight();
+		System.out.println("C05");
+		int[] arr  = new int[x*y];
+		int[] arq  = new int[x*y];
+		System.out.println("C10");
+		arq = in.getImagePixels();
+		System.out.println("C11");
+		for (int idx=0;idx<x*y;idx++) arr[idx] = arq[idx];
+		System.out.println("C15");
+		image = new BufferedImage(x, y, BufferedImage.TYPE_INT_ARGB);
+		image.setRGB(0, 0, x, y, arr, 0, x);
+		System.out.println("C20");
+		width = x;
+		height = y;
+		System.out.println("C25");
 	}
 }
