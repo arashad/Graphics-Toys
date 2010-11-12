@@ -15,7 +15,7 @@ import com.sun.org.apache.xalan.internal.xsltc.runtime.ErrorMessages_ja;
 
 public class mImage {
 	// This class is to hold graphics related methods and properties
-	
+	// TODO solve the problem related to copying object by reference
 	protected static int height; 	// Image Height
 	protected static int width; 	// Image Width
 	protected static BufferedImage image;	// Image Data
@@ -40,7 +40,7 @@ public class mImage {
 		System.out.println("inside "+this.toString()+" Constructor");
 		height 	= im.getHeight();
 		width 	= im.getWidth();
-		image 	= im;
+		image 	= im.getSubimage(0, 0, width, height);
 	}
 	
 	public mImage(BufferedImage im,int x,int y){
@@ -48,7 +48,7 @@ public class mImage {
 		System.out.println("inside "+this.toString()+" Constructor");
 		height 	= y;
 		width 	= x;
-		image 	= im;
+		image 	= im.getSubimage(0, 0, width, height);//image 	= im;
 	}
 	
 	public mImage(String fileName) throws IOException{
@@ -68,9 +68,11 @@ public class mImage {
 	}
 	
 	public mImage(mImage in){
-		image = in.image;
 		height = in.height;
 		width = in.width;
+		
+		image = in.image.getSubimage(0, 0, width, height);//image;
+		
 	}
 	// Methods Area
 	public static BufferedImage getBufferedImage(){
@@ -174,7 +176,8 @@ public class mImage {
 	public static mImage superImpose(mImage a, mImage b) throws Error {
 		// returns the superimposed image from mImages a and b, assuming both are the same size
 		// otherwise return an error
-				
+		a.displayImage("Image a in superImpose");
+		b.displayImage("Image b in superImpose");
 		if (	(a.getLength() != b.getLength())	||
 				(a.getHeight() != b.getHeight())	||
 				(a.getWidth()  != b.getWidth())) 
@@ -194,6 +197,9 @@ public class mImage {
 		for (int idx=0;idx<pa.length;idx++)
 		{
 			po[idx]=pa[idx]|pb[idx];
+//			System.out.print("Superimpose : Red ="+((po[idx]>>RED)&0xff));
+//			System.out.print(" Green ="+((po[idx]>>GREEN)&0xff));
+//			System.out.println(" Blue =" +((po[idx]>>BLUE)&0xff));
 		}
 		
 		mImage mo = new mImage(po,a.getWidth(),a.getHeight());
