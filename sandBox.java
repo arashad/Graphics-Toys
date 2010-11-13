@@ -8,7 +8,7 @@ public class sandBox{
 		try {
 			mIm = new mImage("/home/ahmad/Pictures/ABRV2.jpg");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// nothing to do Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -30,6 +30,7 @@ public class sandBox{
 		redImage.displayImage("Red");
 		mIm.displayImage("Original");
 		compositeImage.displayImage("Composite");
-
+		mIm.resize(0.5);
+		mIm.displayImage("Resized");
 	}
 }

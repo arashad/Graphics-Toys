@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 
 public class mImage {
 	// This class is to hold graphics related methods and properties
-	// TODO solve the problem related to copying object by reference
+	
 	protected int height; 	// Image Height
 	protected int width; 	// Image Width
 	protected BufferedImage image;	// Image Data
@@ -233,5 +233,91 @@ public class mImage {
 		width = x;
 		height = y;
 		System.out.println("C25");
+	}
+	
+	public void resize(double d){
+		// to resize the image by factor passed
+		// 
+		
+		/* Code Sample
+		 * PixelGrabber grabber;
+	    int[] pixels = new int[image.getWidth() * image.getHeight()];
+	    try
+	    {
+	        grabber = new PixelGrabber(image, 0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+	        grabber.grabPixels(0);
+
+	    }
+	    catch (Exception e)
+	    {
+	        e.printStackTrace();
+	    }
+	    return pixels;
+		 */
+		PixelGrabber grabber;
+		
+		int xo=0;
+		int yo=0;
+		int step =  (int) ((int) 1/d);
+		int alphaSum,redSum,greenSum,blueSum;
+		
+		int[] newImage = new int[(int) (height * width * d * d)];
+		int[] buffer = new int[step * step];
+		
+		int nIidx=0;
+		// TODO traverse image by 1/factor on both axis
+		for (int x=0;x< (int) width * d;x+= (int) 1/d)
+		{
+			for (int y=0;y< (int) height * d; y+= (int) 1/d)
+			{
+				alphaSum=0;
+				redSum=0;
+				greenSum=0;
+				blueSum=0;
+				
+				xo = (int) ((int) x/d);
+				yo = (int) ((int) y/d);
+				try
+				{
+					System.out.println("E10");
+					grabber = new PixelGrabber(image,xo,yo,step,step,buffer,0,width);
+					System.out.println("E11");
+					grabber.grabPixels(0);
+					System.out.println("E12");
+				}
+				catch (Exception e)
+			    {
+					System.out.println("Error in Loop");
+			        e.printStackTrace();
+			    }
+				// DONE Get average of each channel from 1/factor x 1/factor squares 
+				//      and save into an array with dimensions width * factor x height * factor
+				for (int idx=0;idx<buffer.length;idx++)
+				{
+					// Get Sum of all channels
+					alphaSum+=(buffer[idx]>>ALPHA	)&0xff;
+					redSum	+=(buffer[idx]>>RED		)&0xff;
+					greenSum+=(buffer[idx]>>GREEN	)&0xff;
+					blueSum	+=(buffer[idx]>>BLUE	)&0xff;
+				}
+				
+				// Average Channels
+				alphaSum=alphaSum/buffer.length;
+				redSum	=redSum/buffer.length;
+				greenSum=greenSum/buffer.length;
+				blueSum	=blueSum/buffer.length;
+				
+				newImage[nIidx++]=	(alphaSum<<ALPHA)+
+									(redSum<<RED)+
+									(greenSum<<GREEN)+
+									(blueSum<<BLUE);
+			}
+		}
+		
+		// TODO save new array to this image
+		width = (int) ((int) width * d);
+		height = (int) ((int) height * d);
+		
+		image.setRGB(0, 0, width, height, newImage, 0, width);
 	}
 }
