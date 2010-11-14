@@ -280,7 +280,8 @@ public class mImage {
 				try
 				{
 					System.out.println("E10");
-					grabber = new PixelGrabber(image,xo,yo,step,step,buffer,0,width);
+					// Fixing error while grabbing portion of the Image replace width with step
+					grabber = new PixelGrabber(image,xo,yo,step,step,buffer,0,step);
 					System.out.println("E11");
 					grabber.grabPixels(0);
 					System.out.println("E12");
