@@ -238,22 +238,7 @@ public class mImage {
 	public void resize(double d){
 		// to resize the image by factor passed
 		// 
-		
-		/* Code Sample
-		 * PixelGrabber grabber;
-	    int[] pixels = new int[image.getWidth() * image.getHeight()];
-	    try
-	    {
-	        grabber = new PixelGrabber(image, 0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-	        grabber.grabPixels(0);
-
-	    }
-	    catch (Exception e)
-	    {
-	        e.printStackTrace();
-	    }
-	    return pixels;
-		 */
+		// TODO handle factor (d) > 1
 		PixelGrabber grabber;
 		
 		int xo=0;
@@ -277,6 +262,7 @@ public class mImage {
 			System.out.println("Progress.."+(float)(100*(y/newY))+"\t%");
 			for (int x=0;x< newX; x+= step)
 			{
+				System.out.println("@x="+x+",y="+y+"\t\t"+((y*x)/(newY*newX))+"\t% \tDone");
 				alphaSum=0;
 				redSum=0;
 				greenSum=0;
@@ -302,6 +288,7 @@ public class mImage {
 				//      and save into an array with dimensions width * factor x height * factor
 				for (int idx=0;idx<buffer.length;idx++)
 				{
+					//System.out.println("\t\t"+());
 					// Get Sum of all channels
 					alphaSum+=(buffer[idx]>>ALPHA	)&0xff;
 					redSum	+=(buffer[idx]>>RED		)&0xff;

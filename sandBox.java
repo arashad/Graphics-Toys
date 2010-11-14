@@ -30,7 +30,7 @@ public class sandBox{
 //		redImage.displayImage("Red");
 		mIm.displayImage("Original");
 //		compositeImage.displayImage("Composite");
-		mIm.resize(0.75);
+		mIm.resize(1);
 		mIm.displayImage("Resized");
 	}
 }
