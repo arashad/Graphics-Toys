@@ -270,6 +270,7 @@ public class mImage {
 		
 		int nIidx=0;
 		// fixed a problem in traversing the image by switching loops
+		System.out.println("About to resize image");
 		for (int y=0;y< newY;y+= step)
 		{
 			for (int x=0;x< newX; x+= step)
@@ -283,12 +284,12 @@ public class mImage {
 				yo = (int) ((int) y/d);
 				try
 				{
-					System.out.println("E10");
+					//System.out.println("E10");
 					// Fixing error while grabbing portion of the Image replace width with step
 					grabber = new PixelGrabber(image,xo,yo,step,step,buffer,0,step);
-					System.out.println("E11");
+					//System.out.println("E11");
 					grabber.grabPixels(0);
-					System.out.println("E12");
+					//System.out.println("E12");
 				}
 				catch (Exception e)
 			    {
@@ -322,7 +323,9 @@ public class mImage {
 		// TODO save new array to this image
 		width = (int) ((int) width * d);
 		height = (int) ((int) height * d);
-		
+		System.out.println("Done resizing image with the following specs");
+		System.out.println("New X:"+newX+" New Y:"+newY+" new X x new Y:"+(newX*newY)+" nIidx:"+nIidx+"new X x Y to nIidx ratio:"+(float)(newX*newY)/nIidx);
+		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		image.setRGB(0, 0, width, height, newImage, 0, width);
 	}
 }
