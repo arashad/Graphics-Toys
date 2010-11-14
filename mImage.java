@@ -261,14 +261,18 @@ public class mImage {
 		int step =  (int) ((int) 1/d);
 		int alphaSum,redSum,greenSum,blueSum;
 		
+		// a cleaner way of representing new dimensions 
+		int newX=(int) (width * d);
+		int newY=(int) (height * d);
+		
 		int[] newImage = new int[(int) (height * width * d * d)];
 		int[] buffer = new int[step * step];
 		
 		int nIidx=0;
-		// TODO traverse image by 1/factor on both axis
-		for (int x=0;x< (int) width * d;x+= (int) 1/d)
+		// fixed a problem in traversing the image by switching loops
+		for (int y=0;y< newY;y+= step)
 		{
-			for (int y=0;y< (int) height * d; y+= (int) 1/d)
+			for (int x=0;x< newX; x+= step)
 			{
 				alphaSum=0;
 				redSum=0;
