@@ -271,8 +271,10 @@ public class mImage {
 		int nIidx=0;
 		// fixed a problem in traversing the image by switching loops
 		System.out.println("About to resize image");
+		
 		for (int y=0;y< newY;y+= step)
 		{
+			System.out.println("Progress.."+(float)(100*(y/newY))+"\t%");
 			for (int x=0;x< newX; x+= step)
 			{
 				alphaSum=0;
@@ -280,8 +282,8 @@ public class mImage {
 				greenSum=0;
 				blueSum=0;
 				
-				xo = (int) ((int) x/d);
-				yo = (int) ((int) y/d);
+				xo = (int) (x/d);
+				yo = (int) (y/d);
 				try
 				{
 					//System.out.println("E10");
@@ -321,8 +323,8 @@ public class mImage {
 		}
 		
 		// TODO save new array to this image
-		width = (int) ((int) width * d);
-		height = (int) ((int) height * d);
+		width = (int) ( width * d);
+		height = (int) ( height * d);
 		System.out.println("Done resizing image with the following specs");
 		System.out.println("New X:"+newX+" New Y:"+newY+" new X x new Y:"+(newX*newY)+" nIidx:"+nIidx+"new X x Y to nIidx ratio:"+(float)(newX*newY)/nIidx);
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
