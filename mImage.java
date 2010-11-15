@@ -259,10 +259,10 @@ public class mImage {
 		
 		for (int y=0;y< newY;y+= step)
 		{
-			System.out.println("Progress.."+(float)(100*(y/newY))+"\t%");
+			//System.out.println("Progress.."+(float)(100*(y/newY))+"\t%");
 			for (int x=0;x< newX; x+= step)
 			{
-				System.out.println("@x="+x+",y="+y+"\t\t"+((y*x)/(newY*newX))+"\t% \tDone");
+				
 				alphaSum=0;
 				redSum=0;
 				greenSum=0;
@@ -306,6 +306,7 @@ public class mImage {
 									(redSum<<RED)+
 									(greenSum<<GREEN)+
 									(blueSum<<BLUE);
+				//System.out.println("@x="+x+",y="+y+"\t\t"+(float)((nIidx)/(newY*newX))+"\t% \tDone");
 			}
 		}
 		
