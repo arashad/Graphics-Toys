@@ -6,7 +6,7 @@ public class sandBox{
 	public static void main(String[] args){
 		mImage mIm=null;
 		try {
-			mIm = new mImage("/home/ahmad/Pictures/ABRV2.jpg");
+			mIm = new mImage("/home/ahmad/Pictures/ABRV.jpg");
 		} catch (IOException e) {
 			// nothing to do Auto-generated catch block
 			e.printStackTrace();
@@ -30,7 +30,7 @@ public class sandBox{
 //		redImage.displayImage("Red");
 		mIm.displayImage("Original");
 //		compositeImage.displayImage("Composite");
-		mIm.resize(1);
+		mIm.resize(0.65);
 		mIm.displayImage("Resized");
 	}
 }

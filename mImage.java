@@ -253,6 +253,19 @@ public class mImage {
 		int[] newImage = new int[(int) (height * width * d * d)];
 		int[] buffer = new int[step * step];
 		
+		int[] imageHolder = new int[width*height];
+		// TODO collect the whole image into imageHolder 
+		grabber = new PixelGrabber(image,0,0,width,height,imageHolder,0,width);
+		try {
+			grabber.grabPixels(0);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		// Now we have array extracted from the image
+		// Done: take the whole image into a single int[] and do operations later
+		arrayImage ai = new arrayImage(imageHolder,width,height);
+		
 		int nIidx=0;
 		// fixed a problem in traversing the image by switching loops
 		System.out.println("About to resize image");
@@ -262,7 +275,7 @@ public class mImage {
 			System.out.println("Progress.."+(float)(100*(y/newY))+"\t%");
 			for (int x=0;x< newX; x+= step)
 			{
-				System.out.println("@x="+x+",y="+y+"\t\t"+((y*x)/(newY*newX))+"\t% \tDone");
+				//System.out.println("@x="+x+",y="+y+"\t\t"+((y*x)/(newY*newX))+"\t% \tDone");
 				alphaSum=0;
 				redSum=0;
 				greenSum=0;
@@ -270,20 +283,9 @@ public class mImage {
 				
 				xo = (int) (x/d);
 				yo = (int) (y/d);
-				try
-				{
-					//System.out.println("E10");
-					// Fixing error while grabbing portion of the Image replace width with step
-					grabber = new PixelGrabber(image,xo,yo,step,step,buffer,0,step);
-					//System.out.println("E11");
-					grabber.grabPixels(0);
-					//System.out.println("E12");
-				}
-				catch (Exception e)
-			    {
-					System.out.println("Error in Loop");
-			        e.printStackTrace();
-			    }
+				
+				buffer=ai.getBox(x, y, x+step, y+step);
+				
 				// DONE Get average of each channel from 1/factor x 1/factor squares 
 				//      and save into an array with dimensions width * factor x height * factor
 				for (int idx=0;idx<buffer.length;idx++)
@@ -309,7 +311,7 @@ public class mImage {
 			}
 		}
 		
-		// TODO save new array to this image
+		// Done: save new array to this image
 		width = (int) ( width * d);
 		height = (int) ( height * d);
 		System.out.println("Done resizing image with the following specs");
