@@ -256,7 +256,7 @@ public class mImage {
 		int nIidx=0;
 		// fixed a problem in traversing the image by switching loops
 		System.out.println("About to resize image");
-		
+		// TODO take the whole image into a single int[] and do operations later
 		for (int y=0;y< newY;y+= step)
 		{
 			//System.out.println("Progress.."+(float)(100*(y/newY))+"\t%");
@@ -310,7 +310,7 @@ public class mImage {
 			}
 		}
 		
-		// TODO save new array to this image
+		// Done: save new array to this image
 		width = (int) ( width * d);
 		height = (int) ( height * d);
 		System.out.println("Done resizing image with the following specs");
