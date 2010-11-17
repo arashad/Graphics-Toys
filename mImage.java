@@ -243,14 +243,14 @@ public class mImage {
 		
 		int xo=0;
 		int yo=0;
-		int step =  (int) ((int) 1/d);
+		int step =  (int) (1/d);
 		int alphaSum,redSum,greenSum,blueSum;
 		
 		// a cleaner way of representing new dimensions 
 		int newX=(int) (width * d);
 		int newY=(int) (height * d);
 		
-		int[] newImage = new int[(int) (height * width * d * d)];
+		int[] newImage = new int[(int) (height * width * d * d*5)];
 		int[] buffer = new int[step * step];
 		
 		int[] imageHolder = new int[width*height];
@@ -275,11 +275,7 @@ public class mImage {
 			//System.out.println("Progress.."+(float)(100*(y/newY))+"\t%");
 			for (int x=0;x< newX; x+= step)
 			{
-<<<<<<< HEAD
-				
-=======
-				//System.out.println("@x="+x+",y="+y+"\t\t"+((y*x)/(newY*newX))+"\t% \tDone");
->>>>>>> clean
+
 				alphaSum=0;
 				redSum=0;
 				greenSum=0;
@@ -287,8 +283,8 @@ public class mImage {
 				
 				xo = (int) (x/d);
 				yo = (int) (y/d);
-				
-				buffer=ai.getBox(x, y, x+step, y+step);
+				buffer = null;
+				buffer=ai.getBox(xo, yo, xo+step, yo+step);
 				
 				// DONE Get average of each channel from 1/factor x 1/factor squares 
 				//      and save into an array with dimensions width * factor x height * factor
@@ -312,15 +308,15 @@ public class mImage {
 									(redSum<<RED)+
 									(greenSum<<GREEN)+
 									(blueSum<<BLUE);
-				//System.out.println("@x="+x+",y="+y+"\t\t"+(float)((nIidx)/(newY*newX))+"\t% \tDone");
+				
 			}
+			
 		}
 		
 		// Done: save new array to this image
 		width = (int) ( width * d);
 		height = (int) ( height * d);
-		System.out.println("Done resizing image with the following specs");
-		System.out.println("New X:"+newX+" New Y:"+newY+" new X x new Y:"+(newX*newY)+" nIidx:"+nIidx+"new X x Y to nIidx ratio:"+(float)(newX*newY)/nIidx);
+		
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		image.setRGB(0, 0, width, height, newImage, 0, width);
 	}

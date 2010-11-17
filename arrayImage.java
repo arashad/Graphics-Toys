@@ -15,7 +15,7 @@ public class arrayImage {
 		aImage = ain;
 		height = y;
 		width  = x;
-<<<<<<< HEAD
+//<<<<<<< HEAD
 	}
 	
 	public arrayImage()	{
@@ -23,8 +23,8 @@ public class arrayImage {
 		aImage = null;
 		height = 0;
 		width = 0;
-	}
-=======
+//	}
+//=======
 		System.out.println("New arrayImage height:"+height+" width:"+width+" Array size:"+aImage.length);
 	}
 	
@@ -34,17 +34,17 @@ public class arrayImage {
 //		height = 0;
 //		width = 0;
 //	}
->>>>>>> clean
+//>>>>>>> clean
 	
 	// Methods area
 	public int[] getBox(int x1, int y1, int x2, int y2){
 		// Returns a portion from the original array 
 		// bound by points (x1,y1) and (x2,y2)
-<<<<<<< HEAD
-		int[] retArray=null;
+//<<<<<<< HEAD
+		//int[] retArray=null;
 		// TODO define algorithm to return part of array
 		
-=======
+//=======
 		int[] retArray=new int[(x2-x1+1)*(y2-y1+1)];
 		// Done: define algorithm to return part of array
 		int idx=y1*width; 	// Index for main array
@@ -57,7 +57,7 @@ public class arrayImage {
 				retArray[idx2++]=aImage[idx++];
 			idx+=width-x2;
 		}
->>>>>>> clean
+//>>>>>>> clean
 		return retArray;
 	}
 }
