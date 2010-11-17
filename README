@@ -1,0 +1,11 @@
+Bugs and Observations
+====================
+* Resize takes long time ... Fixed
+* Resize generates a pixilated image (need a smoth resize algorithm)
+* Resize supports only factor <= 1, it cant enlarge
+
+Features Required
+=================
+* Smothing function
+* Rotate function
+* trace contour function
