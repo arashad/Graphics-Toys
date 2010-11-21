@@ -12,13 +12,13 @@ public class sandBox{
 			e.printStackTrace();
 		}
 		
-//		mImage greenImage = null;
+		mImage greenImage = null;
 //		mImage redImage = null;
 //		mImage compositeImage = null;
 //		
 //		//greenImage.setPixels(mIm);
 //		System.out.println("A5");
-//		greenImage = new mImage(mIm.getChannel(mImage.GREEN));
+		greenImage = new mImage(mIm.getChannel(mImage.GREEN));
 //		redImage = new mImage(mIm.getChannel(mImage.RED));
 //		System.out.println("A10");
 //		//compositeImage.setPixels(greenImage);
@@ -26,7 +26,7 @@ public class sandBox{
 //		System.out.println("A11");
 //		compositeImage.superImpose(redImage);
 //		System.out.println("A12");
-//		greenImage.displayImage("Green");
+		greenImage.displayImage("Green");
 //		redImage.displayImage("Red");
 		mIm.displayImage("Original");
 //		compositeImage.displayImage("Composite");
@@ -36,5 +36,8 @@ public class sandBox{
 		mIm.resize(0.75);
 //>>>>>>> clean
 		mIm.displayImage("Resized");
+		
+		mIm.smooth(5);
+		mIm.displayImage("Smooth");
 	}
 }

@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+
 public class mImage {
 	// This class is to hold graphics related methods and properties
 	
@@ -319,5 +320,66 @@ public class mImage {
 		
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		image.setRGB(0, 0, width, height, newImage, 0, width);
+	}
+	
+	public void smooth(int delta){
+		// Smoothing this image based on factor delta
+		arrayImage ai = new arrayImage(image);
+		
+		int alphaC,redC,greenC,blueC;
+		
+		// TODO have a vertical run 
+		int[] buffer = new int[width];
+		for (int curser=0; curser < height;curser++ )
+		{
+			buffer = ai.getHorizontalLine(curser);
+			for (int idx=0;idx<width;idx++)
+			{
+				alphaC=(buffer[idx]>>ALPHA)&0xff;
+				redC  =(buffer[idx]>>RED  )&0xff;
+				greenC=(buffer[idx]>>GREEN)&0xff;
+				blueC =(buffer[idx]>>BLUE )&0xff;
+				
+				if (((((buffer[idx]>>ALPHA)&0xff)-((buffer[idx+1]>>ALPHA)&0xff))&0xff)>delta) 
+					alphaC=(int)((((buffer[idx]>>ALPHA)&0xff)+((buffer[idx+1]>>ALPHA)&0xff))/2);		
+				if (((((buffer[idx]>>RED)&0xff)-((buffer[idx+1]>>RED)&0xff))&0xff)>delta) 
+					redC=(int)((((buffer[idx]>>RED)&0xff)+((buffer[idx+1]>>RED)&0xff))/2);
+				if (((((buffer[idx]>>GREEN)&0xff)-((buffer[idx+1]>>GREEN)&0xff))&0xff)>delta) 
+					greenC=(int)((((buffer[idx]>>GREEN)&0xff)+((buffer[idx+1]>>GREEN)&0xff))/2);
+				if (((((buffer[idx]>>BLUE)&0xff)-((buffer[idx+1]>>BLUE)&0xff))&0xff)>delta) 
+					blueC=(int)((((buffer[idx]>>BLUE)&0xff)+((buffer[idx+1]>>BLUE)&0xff))/2);
+				
+				buffer[idx]=(alphaC<<ALPHA)+(redC<<RED)+(greenC<<GREEN)+(blueC<<BLUE);
+			}
+			ai.setHLine(curser, buffer);	
+		}
+		// TODO have a horizontal run
+		buffer = new int[width];
+		for (int curser=0; curser < width;curser++ )
+		{
+			buffer = ai.getVerticalLine(curser);
+			for (int idx=0;idx<height;idx++)
+			{
+				alphaC=(buffer[idx]>>ALPHA)&0xff;
+				redC  =(buffer[idx]>>RED  )&0xff;
+				greenC=(buffer[idx]>>GREEN)&0xff;
+				blueC =(buffer[idx]>>BLUE )&0xff;
+				
+				if (((((buffer[idx]>>ALPHA)&0xff)-((buffer[idx+1]>>ALPHA)&0xff))&0xff)>delta) 
+					alphaC=(int)((((buffer[idx]>>ALPHA)&0xff)+((buffer[idx+1]>>ALPHA)&0xff))/2);		
+				if (((((buffer[idx]>>RED)&0xff)-((buffer[idx+1]>>RED)&0xff))&0xff)>delta) 
+					redC=(int)((((buffer[idx]>>RED)&0xff)+((buffer[idx+1]>>RED)&0xff))/2);
+				if (((((buffer[idx]>>GREEN)&0xff)-((buffer[idx+1]>>GREEN)&0xff))&0xff)>delta) 
+					greenC=(int)((((buffer[idx]>>GREEN)&0xff)+((buffer[idx+1]>>GREEN)&0xff))/2);
+				if (((((buffer[idx]>>BLUE)&0xff)-((buffer[idx+1]>>BLUE)&0xff))&0xff)>delta) 
+					blueC=(int)((((buffer[idx]>>BLUE)&0xff)+((buffer[idx+1]>>BLUE)&0xff))/2);
+				
+				buffer[idx]=(alphaC<<ALPHA)+(redC<<RED)+(greenC<<GREEN)+(blueC<<BLUE);
+			}
+			ai.setVLine(curser, buffer);	
+		}
+		
+		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		image.setRGB(0, 0, width, height, ai.getBox(0, 0, width, height) , 0, width);
 	}
 }
