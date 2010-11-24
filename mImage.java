@@ -251,7 +251,7 @@ public class mImage {
 		int newX=(int) (width * d);
 		int newY=(int) (height * d);
 		
-		int[] newImage = new int[(int) (height * width * d * d*5)];
+		int[] newImage = new int[(int) (height * width * d * d)];
 		int[] buffer = new int[step * step];
 		
 		int[] imageHolder = new int[width*height];
@@ -309,17 +309,22 @@ public class mImage {
 									(redSum<<RED)+
 									(greenSum<<GREEN)+
 									(blueSum<<BLUE);
+				//System.out.println("this Pixel = "+newImage[nIidx-1]);
 				
 			}
 			
 		}
-		
+		System.out.println("Done Resize - Original Size = "+height +"x"+width);
 		// Done: save new array to this image
 		width = (int) ( width * d);
 		height = (int) ( height * d);
+		System.out.println("Done Resize - New      Size = "+height +"x"+width);
+		System.out.println("Done Resize - about to cast to BufferedImage");
 		
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		image.setRGB(0, 0, width, height, newImage, 0, width);
+		
+		System.out.println("Done Cast to BufferedImage, Exiting");
 	}
 	
 	public void smooth(int delta){
@@ -333,32 +338,39 @@ public class mImage {
 		for (int curser=0; curser < height;curser++ )
 		{
 			buffer = ai.getHorizontalLine(curser);
-			for (int idx=0;idx<width;idx++)
+			for (int idx=0;idx<width-1;idx++)
 			{
 				alphaC=(buffer[idx]>>ALPHA)&0xff;
 				redC  =(buffer[idx]>>RED  )&0xff;
 				greenC=(buffer[idx]>>GREEN)&0xff;
 				blueC =(buffer[idx]>>BLUE )&0xff;
 				
+			//	System.out.println("V Loop - y = "+curser+" idx = "+idx+" width is "+width);
 				if (((((buffer[idx]>>ALPHA)&0xff)-((buffer[idx+1]>>ALPHA)&0xff))&0xff)>delta) 
-					alphaC=(int)((((buffer[idx]>>ALPHA)&0xff)+((buffer[idx+1]>>ALPHA)&0xff))/2);		
+					alphaC=(int)((((buffer[idx]>>ALPHA)&0xff)+((buffer[idx+1]>>ALPHA)&0xff))/2);
+			//	System.out.println("alpha");
 				if (((((buffer[idx]>>RED)&0xff)-((buffer[idx+1]>>RED)&0xff))&0xff)>delta) 
 					redC=(int)((((buffer[idx]>>RED)&0xff)+((buffer[idx+1]>>RED)&0xff))/2);
+			//	System.out.println("red");
 				if (((((buffer[idx]>>GREEN)&0xff)-((buffer[idx+1]>>GREEN)&0xff))&0xff)>delta) 
 					greenC=(int)((((buffer[idx]>>GREEN)&0xff)+((buffer[idx+1]>>GREEN)&0xff))/2);
+			//	System.out.println("green");
 				if (((((buffer[idx]>>BLUE)&0xff)-((buffer[idx+1]>>BLUE)&0xff))&0xff)>delta) 
 					blueC=(int)((((buffer[idx]>>BLUE)&0xff)+((buffer[idx+1]>>BLUE)&0xff))/2);
 				
+			//	System.out.println("("+curser+"-"+idx+") - After if block ARGB decided");
 				buffer[idx]=(alphaC<<ALPHA)+(redC<<RED)+(greenC<<GREEN)+(blueC<<BLUE);
 			}
+			//System.out.println("setHLine @"+curser);
 			ai.setHLine(curser, buffer);	
 		}
+		System.out.println("Done V Run");
 		// TODO have a horizontal run
 		buffer = new int[width];
 		for (int curser=0; curser < width;curser++ )
 		{
 			buffer = ai.getVerticalLine(curser);
-			for (int idx=0;idx<height;idx++)
+			for (int idx=0;idx<height-1;idx++)
 			{
 				alphaC=(buffer[idx]>>ALPHA)&0xff;
 				redC  =(buffer[idx]>>RED  )&0xff;
@@ -378,8 +390,15 @@ public class mImage {
 			}
 			ai.setVLine(curser, buffer);	
 		}
+		System.out.println("Done H Run");
+		
+		int[] tArray = new int[width*height];
+		tArray = ai.getBox(0, 0, width, height);
+		
+		System.out.println("Array Length = "+tArray.length+" While H x W = "+(height*width));
 		
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		image.setRGB(0, 0, width, height, ai.getBox(0, 0, width, height) , 0, width);
+		image.setRGB(0, 0, width, height, tArray , 0, width);
+		
 	}
 }
