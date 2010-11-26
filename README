@@ -6,6 +6,7 @@ Bugs and Observations
 
 Features Required
 =================
-* Smothing function
+* Smoothing function
+* gradiant function
 * Rotate function
 * trace contour function
